@@ -6,7 +6,7 @@ public class BinaryPrinter {
 	//Create a main method to test your methods.
 	
 	public void printByteBinary(byte b) {
-		
+		b <<= 1;
 	}
 	
 	public void printShortBinary(short s) {
@@ -14,10 +14,15 @@ public class BinaryPrinter {
 	}
 	
 	public void printIntBinary(int i) {
-		
+	
 	}
 	
 	public void printLongBinary(long l) {
 		
+	}
+	
+	public static void main(String[] args) {
+		BinaryPrinter bp = new BinaryPrinter();
+		bp.printIntBinary(33);
 	}
 }
