@@ -46,8 +46,25 @@ public class Base64Decoder {
 	//2. Complete this method so that it will take in a string that is 4 
 	//   characters long and return an array of 3 bytes (24 bits). The byte 
 	//   array should be the binary value of the encoded characters.
-	public static int[] convert4CharsTo24Bits(String s){
-		return IntStream.range(0, s.toCharArray().length).map(i -> convertBase64Char(s.charAt(i))).toArray();
+	public static String[] convert4CharsTo24Bits(String s){
+		String tp = "";
+		int[] temp = IntStream.range(0, s.toCharArray().length)
+				.map(i -> Integer.parseInt(Integer.toBinaryString((int) convertBase64Char(s.charAt(i))))).toArray();
+		 for(Integer i: temp)
+		 {
+			 if(i.toString().length() == 1) {tp += "000" + i;}
+			 else if (i.toString().length() == 2) {tp += "00" + i;}
+			 else if (i.toString().length() == 3) {tp += "0" + i;}
+			 else {tp += i;}
+		 }
+		 
+		 String[] ret = new String[3];
+		 for(int i = 0; i < 4; i++)
+		 {
+			 ret[i] = tp.substring(i*6, i*6 + 7);
+		 }
+		 
+		 return ret;
 	}
 	
 	//3. Complete this method so that it takes in a string of any length
