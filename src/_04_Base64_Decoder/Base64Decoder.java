@@ -43,37 +43,46 @@ public class Base64Decoder {
 		return (byte) IntStream.range(0, base64Chars.length).filter(i -> base64Chars[i] == c).findFirst().orElse(-1);
 	}
 	
+	
 	//2. Complete this method so that it will take in a string that is 4 
 	//   characters long and return an array of 3 bytes (24 bits). The byte 
 	//   array should be the binary value of the encoded characters.
-	public static String[] convert4CharsTo24Bits(String s){
-		String tp = "";
-		int[] temp = IntStream.range(0, s.toCharArray().length)
-				.map(i -> Integer.parseInt(Integer.toBinaryString((int) convertBase64Char(s.charAt(i))))).toArray();
-		 for(Integer i: temp)
-		 {
-			 if(i.toString().length() == 1) {tp += "000" + i;}
-			 else if (i.toString().length() == 2) {tp += "00" + i;}
-			 else if (i.toString().length() == 3) {tp += "0" + i;}
-			 else {tp += i;}
-		 }
-		 
-		 String[] ret = new String[3];
-		 for(int i = 0; i < 4; i++)
-		 {
-			 ret[i] = tp.substring(i*6, i*6 + 7);
-		 }
-		 
-		 return ret;
+	public static byte[] convert4CharsTo24Bits(String s){
+		
+		byte[] bytes = new byte[s.length()];
+		
+		for(int i = 0; i < s.length(); i++) {bytes[i] = convertBase64Char(s.charAt(i));}
+		
+		int temp1 = bytes[0];
+		
+		for(int i = 1; i < bytes.length; i++) {temp1 = (temp1 << 6) | bytes[i];}
+		
+		
+		String temp2 = Integer.toString(temp1, 2);
+		while(temp2.length()%24 != 0)
+		{
+			temp2 = "0" + temp2;
+		}
+		
+		System.out.println(temp2);
+		
+		byte[] ret = new byte[s.length()*6/8];
+		for(int i = 0; i < ret.length; i++)
+		{
+			ret[i] = (byte) Integer.parseInt(temp2.substring(6*i, 6*i + 6), 2);
+		}
+		
+		return ret;
 	}
+	
+	public static void main(String[] args) {
+		System.out.println(Arrays.toString(convert4CharsTo24Bits("////")));
+	}
+	
 	
 	//3. Complete this method so that it takes in a string of any length
 	//   and returns the full byte array of the decoded base64 characters.
 	public static byte[] base64StringToByteArray(String file) {
 		return null;
-	}
-	
-	public static void main(String[] args) {
-		System.out.println(Arrays.toString(Base64Decoder.convert4CharsTo24Bits("ABCD")));
 	}
 }
