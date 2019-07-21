@@ -37,6 +37,9 @@ public class Base64Decoder {
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
 	};
 	
+	//00000000 00010000 10000011 00010000 01010001 11001000
+	//0 16 131 16 81 200
+	
 	//1. Complete this method so that it returns the the element in
 	//   the base64Chars array that corresponds to the passed in char.
 	public static byte convertBase64Char(char c){
@@ -50,39 +53,42 @@ public class Base64Decoder {
 	public static byte[] convert4CharsTo24Bits(String s){
 		
 		byte[] bytes = new byte[s.length()];
-		
-		for(int i = 0; i < s.length(); i++) {bytes[i] = convertBase64Char(s.charAt(i));}
+		for(int i = 0; i < 4; i++) {bytes[i] = convertBase64Char(s.charAt(i));}
 		
 		int temp1 = bytes[0];
-		
 		for(int i = 1; i < bytes.length; i++) {temp1 = (temp1 << 6) | bytes[i];}
 		
-		
 		String temp2 = Integer.toString(temp1, 2);
-		while(temp2.length()%24 != 0)
-		{
-			temp2 = "0" + temp2;
-		}
+		while(temp2.length() != 24){temp2 = "0" + temp2;}
 		
-		System.out.println(temp2);
-		
-		byte[] ret = new byte[s.length()*6/8];
-		for(int i = 0; i < ret.length; i++)
-		{
-			ret[i] = (byte) Integer.parseInt(temp2.substring(6*i, 6*i + 6), 2);
-		}
-		
+		byte[] ret = new byte[3];
+		for(int i = 0; i < 3; i++){ret[i] = (byte) Integer.parseInt(temp2.substring(6*i, 6*i + 6), 2);}
 		return ret;
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(Arrays.toString(convert4CharsTo24Bits("////")));
+		System.out.println(Arrays.toString(base64StringToByteArray("ABCDEFGH")));
 	}
 	
 	
 	//3. Complete this method so that it takes in a string of any length
 	//   and returns the full byte array of the decoded base64 characters.
 	public static byte[] base64StringToByteArray(String file) {
-		return null;
+		byte[] ret = convert4CharsTo24Bits(file.substring(0, 4));
+		
+		for(int i = 1; i < file.length()/4; i++)
+		{
+			ret = concatenate(ret, convert4CharsTo24Bits(file.substring(4*i, 4*(i+1))));
+		}
+		
+		return ret;
+	}
+	
+	public static byte[] concatenate(byte[] b1, byte b2[])
+	{
+		byte[] ret = new byte[b1.length + b2.length];
+		for(int i = 0; i < b1.length; i++) {ret[i] = b1[i];}
+		for(int j = b1.length; j < ret.length; j++) {ret[j] = b2[j - b1.length];}
+		return ret;
 	}
 }
