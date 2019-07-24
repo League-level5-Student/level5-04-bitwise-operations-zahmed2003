@@ -37,9 +37,6 @@ public class Base64Decoder {
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
 	};
 	
-	//00000000 00010000 10000011 00010000 01010001 11001000
-	//0 16 131 16 81 200
-	
 	//1. Complete this method so that it returns the the element in
 	//   the base64Chars array that corresponds to the passed in char.
 	public static byte convertBase64Char(char c){
@@ -61,9 +58,27 @@ public class Base64Decoder {
 		String temp2 = Integer.toString(temp1, 2);
 		while(temp2.length() != 24){temp2 = "0" + temp2;}
 		
+		//System.out.println(temp2);
+		
 		byte[] ret = new byte[3];
-		for(int i = 0; i < 3; i++){ret[i] = (byte) Integer.parseInt(temp2.substring(6*i, 6*i + 6), 2);}
+		for(int i = 0; i < 3; i++){
+			ret[i] = (byte) Integer.parseInt(temp2.substring(8*i, 8*i + 8), 2);
+			}
+		
 		return ret;
+	}
+	
+	public static byte BinaryStringToByte(String s)
+	{
+		int b = 0;
+		int count = 1;
+		for(int i = s.length() - 1; i >= 0; i--)
+		{
+			if(s.charAt(i) == '1') {b = b + count;}
+			count = count*2;
+		}
+		
+		return (byte) b;
 	}
 	
 	public static void main(String[] args) {

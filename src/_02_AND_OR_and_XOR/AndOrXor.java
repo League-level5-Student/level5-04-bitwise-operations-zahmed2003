@@ -47,7 +47,7 @@ public class AndOrXor {
 		// 3 ^ 7 = 1 0 0  <--When the two bits being compared are different, the resulting bit is 1. Otherwise, 0.
 		
 		// Example:
-		// What is the value of 9 | 11?
+		// What is the value of 9 ^ 11?
 		// 9      = 1 0 0 1
 		// 11     = 1 0 1 1
 		// 9 ^ 11 = 0 0 1 0 = 2
